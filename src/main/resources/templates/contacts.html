@@ -1,0 +1,30 @@
+<div class="container mt-4" th:fragment="content">
+  <h2 class="mb-4">Lista de Contatos</h2>
+  <table class="table table-striped">
+    <thead>
+    <tr>
+      <th>Nome</th>
+      <th>Apelido</th>
+      <th>E-mail</th>
+      <th>Telefone</th>
+      <th>Endereço</th>
+    </tr>
+    </thead>
+    <tbody>
+    <th:block th:each="contact : ${contacts}">
+      <tr>
+        <td th:text="${contact?.name}"></td>
+        <td th:text="${contact?.nickname}"></td>
+        <td th:text="${contact?.email}"></td>
+        <td th:text="${contact?.phone}"></td>
+        <td th:text="${contact?.address}"></td>
+        <td>
+          <a th:href="@{'/contato/novo/'}" class="btn btn-primary btn-sm">Novo</a>
+          <a th:href="@{'/contato/atualizar/' + ${contact.id}}" class="btn btn-warning btn-sm">Editar</a>
+          <a th:href="@{'/contato/excluir/' + ${contact.id}}" class="btn btn-danger btn-sm">Deletar</a>
+        </td>
+      </tr>
+    </th:block>
+    </tbody>
+  </table>
+</div>
