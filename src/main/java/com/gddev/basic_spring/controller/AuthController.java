@@ -22,6 +22,12 @@ public class AuthController {
     @Autowired
     private AuthenticationManager authenticationManager;
 
+    /**
+     * Registers a new User into the database.
+     *
+     * @param user User DTO for registration.
+     * @return ResponseEntity with either a success or a fail of the registration.
+     */
     @PostMapping("/register")
     public ResponseEntity register(@RequestBody @Valid RegisterUserDTO user) {
         try {
@@ -34,6 +40,12 @@ public class AuthController {
 
     }
 
+    /**
+     * Log-in an user.
+     *
+     * @param user User DTO.
+     * @return ResponseEntity with the success of the log-in.
+     */
     @PostMapping("/login")
     public ResponseEntity login(@RequestBody @Valid UserDTO user) {
         var usernamePassword = new UsernamePasswordAuthenticationToken(user.username(), user.password());
