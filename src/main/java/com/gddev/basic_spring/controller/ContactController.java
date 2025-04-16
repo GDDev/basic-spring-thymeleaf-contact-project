@@ -3,6 +3,8 @@ package com.gddev.basic_spring.controller;
 import com.gddev.basic_spring.model.User;
 import com.gddev.basic_spring.model.Contact;
 import com.gddev.basic_spring.model.ContactDTO;
+import com.gddev.basic_spring.model.UserDTO;
+import com.gddev.basic_spring.repository.UserRepository;
 import com.gddev.basic_spring.service.ContactService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
@@ -23,52 +25,67 @@ public class ContactController {
 
     @Autowired
     private ContactService service;
+    @Autowired
+    private UserRepository userRepository;
+
+    private User getLoggedUser() {
+        User loggedUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return userRepository.findById(loggedUser.getId()).orElseThrow(EntityNotFoundException::new);
+    }
 
     @GetMapping("/listar")
     public ResponseEntity getAllContacts() {
-        List<Contact> contacts = service.findAllContacts();
+        User user = getLoggedUser();
+        List<Contact> contacts = service.findAllContacts(user.getId());
         return ResponseEntity.ok(contacts);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity getContactById(@PathVariable UUID id) {
+    public ResponseEntity getContactById(@PathVariable String id) {
         Optional<Contact> contato = service.findContactById(id);
         if (contato.isPresent()) {
-            return ResponseEntity.ok(contato.get());
+            User user = getLoggedUser();
+            if (contato.get().getUser().getId().equals(user.getId())) {
+                return ResponseEntity.ok(contato.get());
+            }
         }
         return ResponseEntity.notFound().build();
     }
 
     @PostMapping("/novo")
+    @Transactional
     public ResponseEntity saveContact(@RequestBody @Valid ContactDTO contact) {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        User loggedUser = (User) auth.getPrincipal();
-
-        service.saveContact(contact, loggedUser);
+        User user = getLoggedUser();
+        service.saveContact(contact, user);
         return ResponseEntity.ok().build();
     }
 
     @PutMapping("/atualizar/{id}")
     @Transactional
-    public ResponseEntity updateContact(@RequestBody @Valid ContactDTO contact, @PathVariable UUID id) {
+    public ResponseEntity updateContact(@RequestBody @Valid ContactDTO contact, @PathVariable String id) {
         Optional<Contact> optionalContact = this.service.findContactById(id);
         if (optionalContact.isPresent()) {
-            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-            User loggedUser = (User) auth.getPrincipal();
-
-            Contact updatedContact = this.service.updateContact(contact, loggedUser);
-            return ResponseEntity.ok(updatedContact);
+            User user = getLoggedUser();
+            if (optionalContact.get().getUser().getId().equals(user.getId())) {
+                Contact updatedContact = this.service.updateContact(id, contact,user);
+                return ResponseEntity.ok(updatedContact);
+            }
+            return ResponseEntity.badRequest().body("Acesso negado.");
         }
         throw new EntityNotFoundException();
     }
 
     @DeleteMapping("/excluir/{id}")
     @Transactional
-    public ResponseEntity deleteContact(@PathVariable UUID id) {
+    public ResponseEntity deleteContact(@PathVariable String id) {
         Optional<Contact> optionalContact = this.service.findContactById(id);
         if (optionalContact.isPresent()) {
-            this.service.deleteContact(optionalContact);
-            return ResponseEntity.noContent().build();
+            User user = getLoggedUser();
+            if (optionalContact.get().getUser().getId().equals(user.getId())) {
+                this.service.deleteContact(optionalContact);
+                return ResponseEntity.noContent().build();
+            }
+            return ResponseEntity.badRequest().body("Acesso negado.");
         }
         throw new EntityNotFoundException();
     }

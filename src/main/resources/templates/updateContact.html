@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Novo Contato</title>
+  <title>Atualizar Contato</title>
 
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7" crossorigin="anonymous">
 </head>
@@ -13,44 +13,49 @@
 </aside>
 
 <main>
-  <div th:replace="~{newContact :: content}">
+  <div th:replace="~{updateContact :: content}">
     <div class="container mt-4" th:fragment="content">
-      <h2 class="mb-4">Adicionar Contato</h2>
-      <form class="form text-start" id="newContactForm">
+      <h2 class="mb-4">Atualizar Contato</h2>
+      <form class="form text-start" id="updateContactForm">
+        <input type="hidden" name="id" th:value="${contact.id}">
         <div class="form-row">
           <div class="form-group col-md-6">
             <label for="name" class="col-form-label">Nome</label>
-            <input type="text" id="name" name="name">
-          </div>
-        </div>
-        <div class="form-row">
-          <div class="form-group col-md-6">
-            <label for="nickname" class="col-form-label">Apelido</label>
-            <input type="text" id="nickname" name="nickname">
-          </div>
-        </div>
-        <div class="form-row">
-          <div class="form-group col-md-6">
-            <label for="email" class="col-form-label">E-mail</label>
-            <input type="text" id="email" name="email">
-          </div>
-        </div>
-        <div class="form-row">
-          <div class="form-group col-md-6">
-            <label for="phone" class="col-form-label">Telefone</label>
-            <input type="tel" id="phone" name="phone">
-          </div>
-        </div>
-        <div class="form-row">
-          <div class="form-group col-md-6">
-            <label for="address" class="col-form-label">Endereço</label>
-            <input type="text" id="address" name="address">
+            <input type="text" id="name" name="name" th:value="${contact.name}">
           </div>
         </div>
 
         <div class="form-row">
           <div class="form-group col-md-6">
-            <input type="submit" class="btn btn-primary" value="Adicionar Contato ">
+            <label for="nickname" class="col-form-label">Apelido</label>
+            <input type="text" id="nickname" name="nickname" th:value="${contact.nickname}">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <label for="email" class="col-form-label">E-mail</label>
+            <input type="text" id="email" name="email" th:value="${contact.email}">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <label for="phone" class="col-form-label">Telefone</label>
+            <input type="tel" id="phone" name="phone" th:value="${contact.phone}">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <label for="address" class="col-form-label">Endereço</label>
+            <input type="text" id="address" name="address" th:value="${contact.address}">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <input type="submit" class="btn btn-primary" value="Atualizar Contato">
           </div>
         </div>
       </form>
@@ -58,32 +63,38 @@
   </div>
 </main>
 
-  <script>
-    const newContactForm = document.getElementById('newContactForm');
+<script>
+  document.getElementById("updateContactForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
 
-    newContactForm.addEventListener('submit', async (e) => {
-      e.preventDefault();
+    const form = new FormData(document.getElementById("updateContactForm"));
+    const id = form.get("id");
 
-      const formData = new FormData(newContactForm);
-      const contactData = {};
-      formData.forEach((value, key) => {
-        contactData[key] = value;
-      });
+    const contactData = {
+      name: form.get("name"),
+      nickname: form.get("nickname"),
+      email: form.get("email"),
+      phone: form.get("phone"),
+      address: form.get("address")
+    }
 
-      const response = await fetch('contato/novo', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json'
-        },
-        body: JSON.stringify(contactData)
-      });
-
-      if (response.status === 200) {
-        window.location.href = '/';
-      }
+    const response = await fetch(`/contato/atualizar/${id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        "Accept": "application/json"
+      },
+      body: JSON.stringify(contactData)
     });
-  </script>
+    if (response.status === 200) {
+      alert("Contato atualizado com sucesso!");
+      window.location.href = "/";
+    } else {
+      return alert(await response.text());
+    }
+  });
+</script>
+
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js" integrity="sha384-k6d4wzSIapyDyv1kpU366/PK5hCdSbCRGRCMv+eplOQJWyd1fbcAu9OCUj5zNLiq" crossorigin="anonymous"></script>
 </body>
