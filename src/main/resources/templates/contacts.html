@@ -7,72 +7,72 @@
 
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7" crossorigin="anonymous">
 </head>
-<body class="d-flex flex-row min-vh-100 mx-4">
-<aside>
-  <div th:replace="~{fragments/sidebar :: sidebar}"></div>
-</aside>
+<body class="d-flex font-monospace">
+  <aside class="vh-100 w-auto">
+    <div th:replace="~{fragments/sidebar :: sidebar}"></div>
+  </aside>
 
-<main>
-  <div th:replace="~{contacts :: content}">
-    <div class="container mt-4" th:fragment="content">
-      <h2 class="mb-4">Lista de Contatos</h2>
-      <a th:href="@{'/novoContato'}" class="btn btn-primary btn-sm">Novo</a>
-      <table class="table table-striped">
-        <thead>
-        <tr>
-          <th>Nome</th>
-          <th>Apelido</th>
-          <th>E-mail</th>
-          <th>Telefone</th>
-          <th>Endereço</th>
-        </tr>
-        </thead>
-        <tbody>
-        <th:block th:each="contact : ${contacts}">
+  <main class="vh-100 w-auto">
+    <div th:replace="~{contacts :: content}">
+      <div class="d-flex flex-column ms-5 vh-100 mt-4" th:fragment="content">
+        <h2 class="mb-4">Lista de Contatos</h2>
+        <a th:href="@{'/novoContato'}" class="btn w-auto me-auto btn-primary btn-sm">Novo</a>
+        <table class="table table-striped">
+          <thead>
           <tr>
-            <td th:text="${contact?.name}"></td>
-            <td th:text="${contact?.nickname}"></td>
-            <td th:text="${contact?.email}"></td>
-            <td th:text="${contact?.phone}"></td>
-            <td th:text="${contact?.address}"></td>
-            <td>
-              <a th:href="@{'/contato/atualizar/' + ${contact.id}}" class="btn btn-warning btn-sm">Editar</a>
-              <button class="btn btn-danger btn-sm" th:data-id="${contact.id}" onclick="deleteContact(this)">Deletar</button>
-            </td>
+            <th>Nome</th>
+            <th>Apelido</th>
+            <th>E-mail</th>
+            <th>Telefone</th>
+            <th>Endereço</th>
           </tr>
-        </th:block>
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+          <th:block th:each="contact : ${contacts}">
+            <tr>
+              <td th:text="${contact?.name}"></td>
+              <td th:text="${contact?.nickname}"></td>
+              <td th:text="${contact?.email}"></td>
+              <td th:text="${contact?.phone}"></td>
+              <td th:text="${contact?.address}"></td>
+              <td>
+                <a th:href="@{'/contato/atualizar/' + ${contact.id}}" class="btn btn-warning btn-sm">Editar</a>
+                <button class="btn btn-danger btn-sm" th:data-id="${contact.id}" onclick="deleteContact(this)">Deletar</button>
+              </td>
+            </tr>
+          </th:block>
+          </tbody>
+        </table>
+      </div>
     </div>
-  </div>
-</main>
+  </main>
 
-<script>
-  /**
-   * Calls the RestController to delete a contact.
-   *
-   * @async
-   * @param button The delete button.
-   * @returns {Promise<void>}
-   */
-  async function deleteContact(button) {
-    const id = button.getAttribute("data-id");
+  <script>
+    /**
+     * Calls the RestController to delete a contact.
+     *
+     * @async
+     * @param button The delete button.
+     * @returns {Promise<void>}
+     */
+    async function deleteContact(button) {
+      const id = button.getAttribute("data-id");
 
-    if (confirm("Tem certeza que deseja excluir este contato?")) {
-      const response = await fetch(`/contato/excluir/${id}`, {
-        method: 'DELETE'
-      });
+      if (confirm("Tem certeza que deseja excluir este contato?")) {
+        const response = await fetch(`/contato/excluir/${id}`, {
+          method: 'DELETE'
+        });
 
-      if (response.ok) {
-        alert("Contato excluído com sucesso.");
-        location.reload();
-      } else {
-        alert("Erro ao excluir o contato.");
+        if (response.ok) {
+          alert("Contato excluído com sucesso.");
+          location.reload();
+        } else {
+          alert("Erro ao excluir o contato.");
+        }
       }
     }
-  }
-</script>
+  </script>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js" integrity="sha384-k6d4wzSIapyDyv1kpU366/PK5hCdSbCRGRCMv+eplOQJWyd1fbcAu9OCUj5zNLiq" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js" integrity="sha384-k6d4wzSIapyDyv1kpU366/PK5hCdSbCRGRCMv+eplOQJWyd1fbcAu9OCUj5zNLiq" crossorigin="anonymous"></script>
 </body>
 </html>

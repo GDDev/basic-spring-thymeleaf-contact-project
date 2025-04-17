@@ -7,61 +7,45 @@
 
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7" crossorigin="anonymous">
 </head>
-<body class="d-flex flex-row min-vh-100 mx-4">
-<aside>
-  <div th:replace="~{fragments/sidebar :: sidebar}"></div>
-</aside>
+<body class="d-flex font-monospace">
+  <aside class="vh-100 w-auto">
+    <div th:replace="~{fragments/sidebar :: sidebar}"></div>
+  </aside>
 
-<main>
-  <div th:replace="~{updateContact :: content}">
-    <div class="container mt-4" th:fragment="content">
-      <h2 class="mb-4">Atualizar Contato</h2>
-      <form class="form text-start" id="updateContactForm">
-        <input type="hidden" name="id" th:value="${contact.id}">
-        <div class="form-row">
-          <div class="form-group col-md-6">
-            <label for="name" class="col-form-label">Nome</label>
-            <input type="text" id="name" name="name" th:value="${contact.name}">
+  <main>
+    <div th:replace="~{updateContact :: content}">
+      <div class="d-flex flex-column ms-5 vh-100 mt-4" th:fragment="content">
+        <h2 class="mb-4">Atualizar Contato</h2>
+        <form class="form vh-auto" id="updateContactForm">
+          <input type="hidden" name="id" th:value="${contact.id}">
+
+          <div class="form-group mb-3">
+            <label for="name" class="form-label">Nome</label>
+            <input type="text" class="form-control" id="name" name="name" th:value="${contact.name}">
           </div>
-        </div>
-
-        <div class="form-row">
-          <div class="form-group col-md-6">
-            <label for="nickname" class="col-form-label">Apelido</label>
-            <input type="text" id="nickname" name="nickname" th:value="${contact.nickname}">
+          <div class="form-group mb-3">
+            <label for="nickname" class="form-label">Apelido</label>
+            <input type="text" class="form-control" id="nickname" name="nickname" th:value="${contact.nickname}">
           </div>
-        </div>
-
-        <div class="form-row">
-          <div class="form-group col-md-6">
-            <label for="email" class="col-form-label">E-mail</label>
-            <input type="text" id="email" name="email" th:value="${contact.email}">
+          <div class="form-group mb-3">
+            <label for="email" class="form-label">E-mail</label>
+            <input type="text" class="form-control" id="email" name="email" th:value="${contact.email}">
           </div>
-        </div>
-
-        <div class="form-row">
-          <div class="form-group col-md-6">
-            <label for="phone" class="col-form-label">Telefone</label>
-            <input type="tel" id="phone" name="phone" th:value="${contact.phone}">
+          <div class="form-group mb-3">
+            <label for="phone" class="form-label">Telefone</label>
+            <input type="tel" class="form-control" id="phone" name="phone" th:value="${contact.phone}">
           </div>
-        </div>
-
-        <div class="form-row">
-          <div class="form-group col-md-6">
-            <label for="address" class="col-form-label">Endereço</label>
-            <input type="text" id="address" name="address" th:value="${contact.address}">
+          <div class="form-group mb-3">
+            <label for="address" class="form-label">Endereço</label>
+            <input type="text" class="form-control" id="address" name="address" th:value="${contact.address}">
           </div>
-        </div>
-
-        <div class="form-row">
-          <div class="form-group col-md-6">
+          <div class="form-group">
             <input type="submit" class="btn btn-primary" value="Atualizar Contato">
           </div>
-        </div>
-      </form>
+        </form>
+      </div>
     </div>
-  </div>
-</main>
+  </main>
 
 <script>
   /**
