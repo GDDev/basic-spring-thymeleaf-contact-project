@@ -16,6 +16,13 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 public class SecurityConfig {
 
+    /**
+     * Configures the app's security.
+     *
+     * @param http HttpSecurity.
+     * @return http.
+     * @throws Exception Generalized Exception.
+     */
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
@@ -36,11 +43,23 @@ public class SecurityConfig {
                 .build();
     }
 
+    /**
+     * Defines the Authentication Manager to be used.
+     *
+     * @param config AuthenticationConfiguration.
+     * @return AuthenticationManager.
+     * @throws Exception Generalized Exception.
+     */
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
     }
 
+    /**
+     * Defines the password encryptor.
+     *
+     * @return PasswordEncoder.
+     */
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();

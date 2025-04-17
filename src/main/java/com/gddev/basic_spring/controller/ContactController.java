@@ -93,7 +93,7 @@ public class ContactController {
         if (optionalContact.isPresent()) {
             User user = getLoggedUser();
             if (optionalContact.get().getUser().getId().equals(user.getId())) {
-                Contact updatedContact = this.service.updateContact(id, contact,user);
+                Contact updatedContact = this.service.updateContact(id, contact);
                 return ResponseEntity.ok(updatedContact);
             }
             return ResponseEntity.badRequest().body("Acesso negado.");

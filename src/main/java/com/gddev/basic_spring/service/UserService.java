@@ -17,11 +17,23 @@ public class UserService implements UserDetailsService {
     private UserRepository repo;
     private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
+    /**
+     * Loads a user based on their username.
+     *
+     * @param username String.
+     * @return UserDetails Spring Security's User Model.
+     * @throws UsernameNotFoundException Exception thrown if the username is not found.
+     */
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return repo.findByUsername(username);
     }
 
+    /**
+     * Creates a new User and hashes their password.
+     *
+     * @param user User instance of the user to create.
+     */
     public void newUser(User user) {
         if (this.repo.findByUsername(user.getUsername()) != null){ throw new RuntimeException("Usuário já existe."); }
         user.setPassword(passwordEncoder.encode(user.getPassword()));

@@ -110,7 +110,7 @@ public class MainController {
     /**
      * Renders customized error page.
      *
-     * @return erro HTML page.
+     * @return error HTML page.
      */
     @GetMapping("/error")
     public String error() { return "error"; }
