@@ -48,6 +48,13 @@
 </main>
 
 <script>
+  /**
+   * Calls the RestController to delete a contact.
+   *
+   * @async
+   * @param button The delete button.
+   * @returns {Promise<void>}
+   */
   async function deleteContact(button) {
     const id = button.getAttribute("data-id");
 

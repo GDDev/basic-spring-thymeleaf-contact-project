@@ -35,6 +35,12 @@
     <script>
         const signupForm = document.getElementById('signupForm');
 
+        /**
+         * Arrow function that calls the RestController to sign up a new user.
+         *
+         * @async
+         * @param {Event} e - The form submission event.
+         */
         signupForm.addEventListener('submit', async (e) => {
             e.preventDefault();
 

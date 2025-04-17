@@ -61,6 +61,12 @@
   <script>
     const newContactForm = document.getElementById('newContactForm');
 
+    /**
+     * Arrow function that call the RestController to add a new contact.
+     *
+     * @async
+     * @param {Event} e - The form submission event.
+     */
     newContactForm.addEventListener('submit', async (e) => {
       e.preventDefault();
 
